@@ -1,0 +1,22 @@
+<rules>
+	<rule id="R1">
+		<words>
+			<word value="hello"/>
+		</words>		
+		<states> 
+			<state name="$userstates.intention" value="greeting"/>
+		</states>
+	</rule>
+	
+	<rule id="R31_1">
+		<words>
+			<word value="information"/>
+			<word value="good"/>
+		</words>		
+		<states> 
+			<state name="$userstates.intention" value="expressGoodInformation"/>
+		</states>
+	</rule>	
+	
+</rules>
+

@@ -1,0 +1,48 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="1" name="Return greeting">
+	  <preconditions>
+	     <compare value1="$userstate.intention" value2="greeting" />
+	  </preconditions>
+
+	  <optional>
+		 <option probability="0.5">
+			<c_effects>
+				<c_update name="test" value="test"/>
+			</c_effects>
+			<c_behaviour class="eu.ariaagent.flipper.behaviours.DefaultBehaviour">
+				<c_argument name="response" value="Hello, how are you?" />
+			</c_behaviour>
+		 </option>
+		 <option probability="0.5">
+			<c_effects>
+				<c_update name="test" value="test"/>
+			</c_effects>			
+			<c_behaviour class="eu.ariaagent.flipper.behaviours.DefaultBehaviour">
+				<c_argument name="response" value="Hello, how do you do?" />
+			</c_behaviour>
+		 </option>			
+	  </optional>	  
+	</template>
+		
+	<template id="2" name="Return ending">
+	  <preconditions>
+	     <compare value1="$userstate.intention" value2="ending" />
+	  </preconditions>
+		
+	  <behaviour class="eu.ariaagent.flipper.behaviours.DefaultBehaviour">
+	     <argument name="response" value="Goodbye!" />
+	  </behaviour>
+	</template>
+	
+	<template id="3" name="Unknown intention">
+	  <preconditions>
+	     <compare value1="$userstate.intention" comparator="not_equals" value2="greeting" />
+	     <compare value1="$userstate.intention" comparator="not_equals" value2="ending" />
+	  </preconditions>
+	
+	  <behaviour class="eu.ariaagent.flipper.behaviours.DefaultBehaviour">
+	     <argument name="response" value="Huh, I did not understand that." />
+	  </behaviour>
+	</template>
+</behaviourtemplates>
