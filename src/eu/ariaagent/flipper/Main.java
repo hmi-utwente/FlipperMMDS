@@ -16,7 +16,7 @@ import java.util.Collection;
 public class Main {
     
     private Collection <Manager> managers;
-    private DialogueManager dm;
+    private BehaviourManager dm;
 
     /**
      * @param args the command line arguments
@@ -27,14 +27,14 @@ public class Main {
     }
     
     public Main(){                
-        InformationManager im = new InformationManager();
-        FeedbackManager fm = new FeedbackManager();
-        StructureManager sm = new StructureManager();
+        //InformationManager im = new InformationManager();
+        //FeedbackManager fm = new FeedbackManager();
+        //StructureManager sm = new StructureManager();
         this.managers = new ArrayList<>();
-        managers.add(im);
+        //managers.add(im);
         //managers.add(fm);
         //managers.add(sm);        
-        dm = new DialogueManager(managers);
+        //dm = new BehaviourManager();
         dm.startDialogue();
         
     }    

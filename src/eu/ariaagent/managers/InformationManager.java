@@ -10,6 +10,7 @@ import eu.ariaagent.util.Rules;
 import eu.ariaagent.util.RulesReader;
 import eu.ariaagent.util.State;
 import hmi.flipper.behaviourselection.TemplateController;
+import hmi.flipper.defaultInformationstate.DefaultRecord;
 import hmi.flipper.informationstate.Item;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -34,8 +35,9 @@ public class InformationManager extends DefaultManager{
     private TemplateController itc;
     private SubscribableRecord is;
     
-    public InformationManager()
+    public InformationManager(DefaultRecord is, long interval)
     {        
+        super(is, interval);
         rule_file = "D:/Github/FlipperExample/Rules.xml";
         template_file = "D:/GitHub/FlipperMMDS/resources/Example.xml";
         rulesreader = new RulesReader(rule_file);
@@ -48,7 +50,6 @@ public class InformationManager extends DefaultManager{
         
     }
     
-    @Override
     public void process(SubscribableRecord sr){
         this.is = sr;
         String userText = is.getRecord("userstate").getString("utterance");
@@ -110,7 +111,6 @@ public class InformationManager extends DefaultManager{
     
     
 
-    @Override
     public void update(SubscribableRecord sr, SubscribableRecord.UpdateType ut, Item value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }

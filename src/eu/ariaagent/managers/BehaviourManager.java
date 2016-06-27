@@ -18,15 +18,16 @@ import hmi.flipper.informationstate.Item;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
+import javax.validation.constraints.NotNull;
 
 /**
- * The DialogueManager is responsible for merging the output of different managers into a good response
- * from the agent.
+ * The BehaviourManager is responsible for merging the output of different managers into a good response
+ from the agent.
  * Input: Output of all managers, user interaction, template controller
  * Output: Response of the system
  * @author WaterschootJB
  */
-public class DialogueManager extends DefaultManager{
+public class BehaviourManager extends DefaultManager{
     
     private Collection <Manager> managers;
     //protected TemplateController controller;
@@ -41,9 +42,12 @@ public class DialogueManager extends DefaultManager{
     private UserSay lastUserSay = null;
     
     /* Set up all managers for updating the information states */
-    public DialogueManager(Collection <Manager> managers){  
-        this.managers = managers;
-        is = new SubscribableRecord();
+    public BehaviourManager(DefaultRecord is, long interval){
+        super(is,interval);
+    }
+    
+    public BehaviourManager(DefaultRecord is){
+        super(is);
     }
     
     public void startDialogue(){
