@@ -25,6 +25,12 @@ public interface Manager {
 
     void setInterval(int ms);
 
-    void setIs(DefaultRecord is);
+    void setIS(DefaultRecord is);
+    
+    void addTemplateFile(String templatePath);
+    
+    void setParams(String[] strings, String[][] stringArrays);
+    
+    void addFunction(String className, String path); //perhaps we only allow ofther stuffs, see simpleexample
     
 }
