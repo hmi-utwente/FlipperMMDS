@@ -68,7 +68,17 @@ public abstract class DefaultManager implements Manager{
     }
 
     @Override
-    public void setIs(DefaultRecord is) {
+    public void setIS(DefaultRecord is) {
         this.is = is;
+    }
+    
+    @Override
+    public void setParams(String[] strings, String[][] stringArrays){
+        //do nothing
+    }
+    
+    @Override
+    public void addTemplateFile(String templatePath){
+        tc.processTemplateFile(templatePath);
     }
 }

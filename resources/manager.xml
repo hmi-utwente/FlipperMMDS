@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-	<xs:element name="manager" maxOccurs="unbounded">
+	<xs:element name="manager">
 	  <xs:complexType>
 		<xs:sequence>
 		  <xs:element name="interval" type="xs:int"/>
-		  <xs:element name="template_path" type="xs:string"/>
-		  <xs:element name="function_path" type="xs:string" />
 		</xs:sequence>
 	  </xs:complexType>
 	</xs:element> 
