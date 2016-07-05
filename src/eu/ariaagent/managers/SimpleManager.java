@@ -31,5 +31,10 @@ public class SimpleManager extends DefaultManager{
             }
         }        
     } 
+
+    @Override
+    public void addFunction(String className, String path) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
     
 }
