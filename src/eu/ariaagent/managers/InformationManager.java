@@ -33,7 +33,6 @@ public class InformationManager extends DefaultManager{
     private final ArrayList<Rules> rules;
     private final RulesReader rulesreader;
     private TemplateController itc;
-    private SubscribableRecord is;
     
     public InformationManager(DefaultRecord is, long interval)
     {        
@@ -114,10 +113,4 @@ public class InformationManager extends DefaultManager{
     public void update(SubscribableRecord sr, SubscribableRecord.UpdateType ut, Item value) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-
-    @Override
-    public void addFunction(String className, String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

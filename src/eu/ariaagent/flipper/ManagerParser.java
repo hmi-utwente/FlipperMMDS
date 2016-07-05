@@ -3,24 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package eu.ariaagent.managers;
+package eu.ariaagent.flipper;
 
-import hmi.flipper.defaultInformationstate.DefaultRecord;
+import eu.ariaagent.managers.Manager;
+import java.util.Collection;
 
 /**
  *
  * @author WaterschootJB
  */
-public class FeedbackManager extends DefaultManager {
+public class ManagerParser {
 
-    public FeedbackManager(DefaultRecord is) {
-        super(is);
-    }
-
-    @Override
-    public void addFunction(Object functionInstance) {
+    public Collection<Manager> parseFolder(String managerPath) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    
     
 }

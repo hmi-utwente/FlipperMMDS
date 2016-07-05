@@ -33,7 +33,7 @@ public class SimpleManager extends DefaultManager{
     } 
 
     @Override
-    public void addFunction(String className, String path) {
+    public void addFunction(Object functionInstance) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

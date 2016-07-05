@@ -1,42 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.ariaagent.flipper;
-
-import eu.ariaagent.managers.*;
-import java.util.ArrayList;
-import java.util.Collection;
-
 /**
- *
- * @author Siewart
+ * Main class for initializing the MMDS, with a path to where dialogue managers are located.
+ * @author WaterschootJB
  */
 public class Main {
     
-    private Collection <Manager> managers;
-    private BehaviourManager dm;
-
     /**
-     * @param args the command line arguments
+     * @param args the command line arguments, of which one can be the path to where the managers are located.
      */
     public static void main( String args[] )
     {
-        Main dialogueManagementSystem = new Main();        
-    }
-    
-    public Main(){                
-        //InformationManager im = new InformationManager();
-        //FeedbackManager fm = new FeedbackManager();
-        //StructureManager sm = new StructureManager();
-        this.managers = new ArrayList<>();
-        //managers.add(im);
-        //managers.add(fm);
-        //managers.add(sm);        
-        //dm = new BehaviourManager();
-        dm.startDialogue();
-        
-    }    
-    
+        String managerPath = System.getProperty("managerpath",null);
+        if(managerPath == null){
+            System.getProperty("user.dir");
+        }
+        else{
+            System.err.print("Make sure you initialize your application from an existing path!");
+            return;
+        }
+        ManagerController dialogueManagementSystem = new ManagerController(managerPath);
+    }   
 }

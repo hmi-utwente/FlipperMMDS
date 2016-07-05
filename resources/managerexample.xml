@@ -18,7 +18,7 @@ Managers: A template can contain one or multiple managers, and for each managers
 
 <managers>
 	<manager id="001" name="InformationManager" interval="1000">
-		<class classname="information_functions" path="C:/info_function.jar">
+		<class classname="information_functions" path="C:/informationmanager.java">
 			<parameter name="ip" value="0.0.0.0"/>
 			<parameterarray name="datasets">
 				<item value="info1.txt"/>

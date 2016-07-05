@@ -14,11 +14,9 @@ import eu.ariaagent.flipper.subscribableInformationstate.SubscribableRecord;
 import eu.ariaagent.util.*;
 import hmi.flipper.behaviourselection.TemplateController;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
-import hmi.flipper.informationstate.Item;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Scanner;
-import javax.validation.constraints.NotNull;
 
 /**
  * The BehaviourManager is responsible for merging the output of different managers into a good response
@@ -31,7 +29,7 @@ public class BehaviourManager extends DefaultManager{
     
     private Collection <Manager> managers;
     //protected TemplateController controller;
-    private SubscribableRecord is;
+    private DefaultRecord is;
     private TemplateController controller;
     private ArrayList<String> userSayAL;
     private SentencesToKeywords sk;
@@ -73,12 +71,9 @@ public class BehaviourManager extends DefaultManager{
                     m.process();
                 }
             }
-                controller.checkTemplates(is);
+            controller.checkTemplates(is);
         }
     }
 
-    @Override
-    public void addFunction(String className, String path) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    
 }

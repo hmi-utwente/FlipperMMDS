@@ -31,13 +31,12 @@ public abstract class DefaultManager implements Manager{
         this(is,500);
     }
     
-    @Override
-    public boolean canProcess(){
-        if (System.currentTimeMillis() > previousTime + interval){
-            previousTime = System.currentTimeMillis();
-            return(true);
-        }
-        return(false);
+    /**
+     * Determines if the manager's time is already up.
+     * @return true if it is, false otherwise.
+     */
+    private boolean canProcess(){
+        return System.currentTimeMillis() > previousTime + interval;
     }
     
     @Override
@@ -46,8 +45,9 @@ public abstract class DefaultManager implements Manager{
     }
     
     @Override
-    public void process(){
-        if(canProcess()){
+    public void process(){ 
+        if (canProcess()){
+            previousTime = System.currentTimeMillis(); 
             tc.checkTemplates(is);
         }
     }
@@ -58,12 +58,12 @@ public abstract class DefaultManager implements Manager{
     }
     
     @Override
-    public long getInterval(int ms){
+    public long getInterval(){
         return this.interval;
     }
     
     @Override
-    public DefaultRecord getIs() {
+    public DefaultRecord getIS() {
         return is;
     }
 
@@ -80,5 +80,10 @@ public abstract class DefaultManager implements Manager{
     @Override
     public void addTemplateFile(String templatePath){
         tc.processTemplateFile(templatePath);
+    }
+    
+    @Override
+    public void addFunction(Object functionInstance) {
+        tc.addFunction(functionInstance);
     }
 }
