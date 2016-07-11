@@ -8,7 +8,8 @@ package eu.ariaagent.managers;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * The information seek manager provides statements and question posed by the 
+ * virtual agent.
  * @author WaterschootJB
  */
 public class InfoSeekManager extends DefaultManager {

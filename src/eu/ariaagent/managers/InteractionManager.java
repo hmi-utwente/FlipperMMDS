@@ -8,7 +8,8 @@ package eu.ariaagent.managers;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * The interaction manager is responsible for interactions such as turn management,
+ * time management, contact management, communication management and topic management.
  * @author WaterschootJB
  */
 public class InteractionManager extends DefaultManager{

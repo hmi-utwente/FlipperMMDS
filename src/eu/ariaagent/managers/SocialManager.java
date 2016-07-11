@@ -8,7 +8,8 @@ package eu.ariaagent.managers;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * The social manager takes care of social obligations, such as salutation, apologizing,
+ * gratitude, introducing yourself and valediction.
  * @author WaterschootJB
  */
 public class SocialManager extends DefaultManager{

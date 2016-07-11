@@ -8,7 +8,7 @@ package eu.ariaagent.managers;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * Recognizes the purpose of the user and updates it in the information state.
  * @author WaterschootJB
  */
 public class StructureManager extends DefaultManager {
