@@ -11,9 +11,10 @@ import hmi.flipper.defaultInformationstate.DefaultRecord;
  *
  * @author WaterschootJB
  */
-public class StructureManager extends DefaultManager {
+public class InfoSeekManager extends DefaultManager {
     
-    public StructureManager(DefaultRecord is, long interval) {
+    public InfoSeekManager(DefaultRecord is, long interval) {
         super(is, interval);
-    }    
+    }
+    
 }

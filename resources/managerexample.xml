@@ -18,7 +18,7 @@ Managers: A template can contain one or multiple managers, and for each managers
 
 <managers>
 	<manager id="001" name="InformationManager" interval="1000">
-		<class classname="information_functions" path="C:/informationmanager.java">
+		<class classname="MyCustomManager" path="C:/mycustommanager.jar">
 			<parameter name="ip" value="0.0.0.0"/>
 			<parameterarray name="datasets">
 				<item value="info1.txt"/>
@@ -30,7 +30,7 @@ Managers: A template can contain one or multiple managers, and for each managers
 			<state name="$userstate.intention" value="greeting" override="false"/>
 		</informationstate>
 		<templates>
-			<template id="001" name="information_template" path="C:/example.xsd" />		
+			<template id="001" name="information_template" path="C:/example.xml" />		
 		</templates>
 		<functions>
 			<function id="001" classname="information_functions" path="C:/info_function.jar" /> 

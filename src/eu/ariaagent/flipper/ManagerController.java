@@ -3,7 +3,9 @@ package eu.ariaagent.flipper;
 import eu.ariaagent.managers.Manager;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -68,15 +70,28 @@ public class ManagerController {
             }
         }
     }    
+    
+    private void startAlternative(){
+        Stack <Manager> managers2 = new Stack<>();
+        while(!managers2.isEmpty()){
+            managers2.sort(new NextManagerComparator());
+            Manager m = managers2.peek();
+            if(m.timeUntilNextProcess() < 0){
+                m = managers2.pop();
+                m.process();
+                managers2.push(m);
+            }
+        }
+    }
 
-//    private static class NextManagerComparator implements Comparator<Manager> {
-//
-//        public NextManagerComparator() {
-//        }
-//
-//        @Override
-//        public int compare(Manager m1, Manager m2) {
-//            return (int) (m2.timeUntilNextProcess() - m1.timeUntilNextProcess());
-//        }
-//    }
+    private static class NextManagerComparator implements Comparator<Manager> {
+
+        public NextManagerComparator() {
+        }
+
+        @Override
+        public int compare(Manager m1, Manager m2) {
+            return (int) (m2.timeUntilNextProcess() - m1.timeUntilNextProcess());
+        }
+    }
 }

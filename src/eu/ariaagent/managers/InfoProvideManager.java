@@ -8,12 +8,14 @@ package eu.ariaagent.managers;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * The information retrieval manager for providing information, such as answers to user's questions,
+ * an elaboration or admitting not knowing the information.
  * @author WaterschootJB
  */
-public class StructureManager extends DefaultManager {
+public class InfoProvideManager extends DefaultManager {
     
-    public StructureManager(DefaultRecord is, long interval) {
+    public InfoProvideManager(DefaultRecord is, long interval) {
         super(is, interval);
-    }    
+    }
+    
 }

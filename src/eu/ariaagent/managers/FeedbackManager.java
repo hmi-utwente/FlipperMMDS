@@ -1,26 +1,16 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.ariaagent.managers;
 
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 
 /**
- *
+ * The feedback manager is responsible for providing feedback to what the user is saying,
+ * as well as provide feedback on its own words. Likewise, it tries to determine what
+ * type of feedback the user is providing.
  * @author WaterschootJB
  */
-public class FeedbackManager extends DefaultManager {
-
-    public FeedbackManager(DefaultRecord is) {
-        super(is);
-    }
-
-    @Override
-    public void addFunction(Object functionInstance) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+public class FeedbackManager extends DefaultManager{
     
+    public FeedbackManager(DefaultRecord is, long interval) {
+        super(is, interval);
+    }    
 }

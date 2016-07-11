@@ -11,9 +11,10 @@ import hmi.flipper.defaultInformationstate.DefaultRecord;
  *
  * @author WaterschootJB
  */
-public class StructureManager extends DefaultManager {
+public class SocialManager extends DefaultManager{
     
-    public StructureManager(DefaultRecord is, long interval) {
+    public SocialManager(DefaultRecord is, long interval) {
         super(is, interval);
-    }    
+    }
+    
 }

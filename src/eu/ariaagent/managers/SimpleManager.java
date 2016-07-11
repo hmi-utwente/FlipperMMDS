@@ -15,8 +15,8 @@ import java.util.Collection;
  */
 public class SimpleManager extends DefaultManager{
     
-    private Collection <String> paths;
-    private Collection <Object> functions;
+    private final Collection <String> paths;
+    private final Collection <Object> functions;
     
     public SimpleManager(DefaultRecord is, long interval, @NotNull Collection <String> paths, Collection <Object> functions){
         super(is,interval);

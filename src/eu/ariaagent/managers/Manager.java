@@ -67,4 +67,10 @@ public interface Manager {
      */
     void addFunction(Object functionInstance);
     
+    /**
+     * Returns the name of the manager
+     * @return the name
+     */
+    String managerName();
+    
 }

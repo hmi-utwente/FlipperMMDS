@@ -86,4 +86,9 @@ public abstract class DefaultManager implements Manager{
     public void addFunction(Object functionInstance) {
         tc.addFunction(functionInstance);
     }
+    
+    @Override
+    public String managerName() {
+        return this.getClass().toString();
+    }
 }
