@@ -26,7 +26,8 @@ public class ManagerController {
      */
     public ManagerController(String managerPath){
         mp = new ManagerParser();
-        Collection <Manager> newManagers = mp.parseFolder(managerPath);
+        Collection <Manager> newManagers = null;
+        newManagers = mp.parseFolder(managerPath);
         managers = new ArrayList<>();
         managers.addAll(newManagers);
     }
@@ -34,10 +35,11 @@ public class ManagerController {
     /**
      * Method that loops through all of the managers and checks if it's a manager's turn.
      * Also some extra checks to see if managers run out of sync.
+     * Does not terminate
      */
-    public void start(){
+    public void run(){
         if(managers == null || managers.isEmpty()){
-            System.err.println("You fool, you have no managers.");
+            System.err.println("No managers to run found.");
         }
         while(!managers.isEmpty()){
             long startTime = System.currentTimeMillis();
@@ -51,17 +53,20 @@ public class ManagerController {
                 }
             }
             long loopTime = System.currentTimeMillis() - startTime;
+            System.out.println(nextTime + ":" + loopTime +"="+(nextTime-loopTime));
             nextTime -= loopTime;
-            if(nextTime < 0 && nextManager != null){
+            if(nextTime <= 0 && nextManager != null){
                 nextManager.process();
+                System.out.println("Parsing Manager: "+ nextManager.getName() + " at " + System.currentTimeMillis());
                 if(-nextTime > nextManager.getInterval()/2){
                     System.out.println("We waited over half of the interval time ("+ (-nextTime) + " out of " + nextManager.getInterval()+")");
-                }else if(-nextTime > 10){
-                    System.out.println("We waited over 10 ms too long. In total: "+ -nextTime + "ms.");
+                }else if(-nextTime > 50){
+                    System.out.println("We waited over 50 ms too long. In total: "+ -nextTime + "ms.");
                 }                
             }else{
                 try {
                     if(nextTime > 0){
+                        System.out.println("Sleeping for..."+nextTime);
                         Thread.sleep(nextTime);
                     }
                 } catch (InterruptedException ex) {
@@ -70,28 +75,4 @@ public class ManagerController {
             }
         }
     }    
-    
-    private void startAlternative(){
-        Stack <Manager> managers2 = new Stack<>();
-        while(!managers2.isEmpty()){
-            managers2.sort(new NextManagerComparator());
-            Manager m = managers2.peek();
-            if(m.timeUntilNextProcess() < 0){
-                m = managers2.pop();
-                m.process();
-                managers2.push(m);
-            }
-        }
-    }
-
-    private static class NextManagerComparator implements Comparator<Manager> {
-
-        public NextManagerComparator() {
-        }
-
-        @Override
-        public int compare(Manager m1, Manager m2) {
-            return (int) (m2.timeUntilNextProcess() - m1.timeUntilNextProcess());
-        }
-    }
 }

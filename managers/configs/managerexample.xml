@@ -5,7 +5,7 @@ A manager template uses a structure similar to the templates used in Flipper.
 When creating a template, it consists of three required parts and one optional.
 
 Managers: A template can contain one or multiple managers, and for each managers:
-	InformationState: None or one information state (DefaultRecords) where the manager can update from and read to.
+	InformationState: None or one information state (DefaultRecords) where the manager can update from and read to. Does not override by default.
 	Template: None or one Flipper template that the manager has to process
 	Function: None or more custom made functions that can be called from the manager
 	(Optional) Class: The custom classes can be called when creating a custom manager which for example needs a
@@ -17,8 +17,8 @@ Managers: A template can contain one or multiple managers, and for each managers
 --> 
 
 <managers>
-	<manager id="001" name="InformationManager" interval="1000">
-		<class classname="MyCustomManager" path="C:/mycustommanager.jar">
+	<!--<manager id="001" name="InformationManager" interval="1000">
+		<class classname="information_functions" path="C:/informationmanager.java">
 			<parameter name="ip" value="0.0.0.0"/>
 			<parameterarray name="datasets">
 				<item value="info1.txt"/>
@@ -26,14 +26,14 @@ Managers: A template can contain one or multiple managers, and for each managers
 				<item value="info3.txt"/>
 			</parameterarray>
 		</class>
-		<informationstate name="infostate">
+		<informationstate>
 			<state name="$userstate.intention" value="greeting" override="false"/>
 		</informationstate>
 		<templates>
-			<template id="001" name="information_template" path="C:/example.xml" />		
+			<template path="example.xml" />		
 		</templates>
 		<functions>
-			<function id="001" classname="information_functions" path="C:/info_function.jar" /> 
+			<function classname="information_functions" path="C:/info_function.jar" /> 
 		</functions>
 	</manager>
 
@@ -47,15 +47,39 @@ Managers: A template can contain one or multiple managers, and for each managers
 				<item value="info3.txt"/>
 			</parameterarray>
 		</class>
-		<informationstate name="infostate">
+		<informationstate>
 			<state name="$userstate.intention" value="greeting" override="false"/>
 		</informationstate>
 		<templates>
-			<template id="001" name="information_template" path="C:/example.xsd" />		
+			<template path="C:/example.xsd" />		
 		</templates>
 		<functions>
-			<function id="001" classname="information_functions" path="C:/info_function.jar" /> 
+			<function classname="information_functions" path="C:/info_function.jar" /> 
+		</functions>
+	</manager>
+
+-->
+
+	<manager id="002" name="Test" interval="2000">
+		<class classname="eu.ariaagent.managertest.managers.TestManager" path="../jars/TestFunctions.jar">
+			<parameter name="ip" value="0.0.0.0"/>
+			<parameterarray name="datasets">
+				<item value="info1.txt"/>
+				<item value="info2.txt"/>
+				<item value="info3.txt"/>
+			</parameterarray>
+		</class>
+		<informationstate>
+			<state name="$printtype" value="line" override="false"/>
+		</informationstate>
+		<behaviours>
+			<behaviour path="../jars/TestFunctions.jar" />
+		</behaviours>
+		<templates>
+			<template path="../templates/functionExample.xml" />		
+		</templates>
+		<functions>
+			<function path="../jars/TestFunctions.jar" classname="eu.ariaagent.managertest.functions.TestFunctions"/>		
 		</functions>
 	</manager>
 </managers>
-

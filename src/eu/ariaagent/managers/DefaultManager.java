@@ -6,19 +6,29 @@
 package eu.ariaagent.managers;
 
 import hmi.flipper.behaviourselection.TemplateController;
+import hmi.flipper.behaviourselection.template.behaviours.BehaviourClassProvider;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.validation.constraints.NotNull;
 
 /**
  *
  * @author WaterschootJB
  */
-public abstract class DefaultManager implements Manager{
+public abstract class DefaultManager implements Manager
+{
     
     protected long interval;
     protected long previousTime;
     protected DefaultRecord is;
     protected TemplateController tc;
+    protected String name;
+    protected String id;
    
     public DefaultManager(@NotNull DefaultRecord is, long interval){
         this.is = is;
@@ -36,7 +46,7 @@ public abstract class DefaultManager implements Manager{
      * @return true if it is, false otherwise.
      */
     private boolean canProcess(){
-        return System.currentTimeMillis() > previousTime + interval;
+        return System.currentTimeMillis() >= previousTime + interval;
     }
     
     @Override
@@ -72,10 +82,7 @@ public abstract class DefaultManager implements Manager{
         this.is = is;
     }
     
-    @Override
-    public void setParams(String[] strings, String[][] stringArrays){
-        //do nothing
-    }
+
     
     @Override
     public void addTemplateFile(String templatePath){
@@ -86,9 +93,44 @@ public abstract class DefaultManager implements Manager{
     public void addFunction(Object functionInstance) {
         tc.addFunction(functionInstance);
     }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String getID() {
+        return id;
+    }
+
+    @Override
+    public void setID(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public void setParams(Map<String, String> namedValues, Map<String, String[]> namedLists) {
+        //Do nothing
+    }
     
     @Override
-    public String managerName() {
-        return this.getClass().toString();
+    public void addBehaviourClasses(String jarPath)
+    {
+        System.out.println("AddBehaviourClasses:"+jarPath);
+        URL[] urls = null;
+        try {
+            urls = new URL[]{new URL("jar:file:"+jarPath+"!/")};
+            BehaviourClassProvider.addExternalClasses(urls);
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(DefaultManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
     }
 }

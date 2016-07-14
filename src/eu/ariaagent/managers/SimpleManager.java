@@ -14,27 +14,8 @@ import java.util.Collection;
  * @author WaterschootJB
  */
 public class SimpleManager extends DefaultManager{
-    
-    private final Collection <String> paths;
-    private final Collection <Object> functions;
-    
-    public SimpleManager(DefaultRecord is, long interval, @NotNull Collection <String> paths, Collection <Object> functions){
-        super(is,interval);
-        this.paths = paths;
-        this.functions = functions;
-        for(String p : paths){
-            super.tc.processTemplateFile(p);
-        }
-        if(functions != null){
-            for(Object f : functions){
-                super.tc.addFunction(f);
-            }
-        }        
+        
+    public SimpleManager(DefaultRecord is){
+        super(is);     
     } 
-
-    @Override
-    public void addFunction(Object functionInstance) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

@@ -1,0 +1,29 @@
+<behaviourtemplates xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com template.xsd">
+	
+	<template id="1" name="Print Error">
+	  <preconditions>
+	     <compare value1="$printtype" value2="error" />
+	  </preconditions>
+	   <effects>
+	   	  <update name="$printtype" value="line" />
+	      <function name="printError">
+	      	<argument value="This is printed error" />
+	      </function>
+	   </effects>
+	</template>
+		
+	<template id="2" name="Print Line">
+	  <preconditions>
+	     <compare value1="$printtype" value2="line" />
+	  </preconditions>
+	   <effects>
+	   	  <update name="$printtype" value="error" />
+	      <function name="printText">
+	      	<argument value="This is printed text" />
+	      </function>
+	   </effects>
+	   <behaviour class="eu.ariaagent.managertest.behaviours.TestBehaviour">
+	      <argument name="response" value="Hello, how are you?" />
+	   </behaviour>
+	</template>
+</behaviourtemplates>

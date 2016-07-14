@@ -6,6 +6,8 @@
 package eu.ariaagent.managers;
 
 import hmi.flipper.defaultInformationstate.DefaultRecord;
+import java.util.Dictionary;
+import java.util.Map;
 
 /**
  *
@@ -20,10 +22,15 @@ public interface Manager {
     long timeUntilNextProcess();
 
     /**
-     * Returns the interval of the manager
+     * Returns the activation interval of the manager
      * @return the interval
      */
     long getInterval();
+    
+    String getName();
+    void setName(String name);
+    String getID();
+    void setID(String id);
     
     /**
      * Returns the information state the manager can read from/update to
@@ -56,10 +63,10 @@ public interface Manager {
     
     /**
      * Parses parameters of a custom class and calls them.
-     * @param strings, the calls
-     * @param stringArrays, the lists of arguments
+     * @param namedValues, the calls
+     * @param namedLists, the lists of arguments
      */
-    void setParams(String[] strings, String[][] stringArrays);
+    void setParams(Map<String, String> namedValues, Map<String, String[]> namedLists);
     
     /**
      * Add a custom Java function to the manager
@@ -68,9 +75,11 @@ public interface Manager {
     void addFunction(Object functionInstance);
     
     /**
-     * Returns the name of the manager
-     * @return the name
+     * 
+     * @param jarPath Location of path
      */
-    String managerName();
-    
+    void addBehaviourClasses(String jarPath);
+   
 }
+
+

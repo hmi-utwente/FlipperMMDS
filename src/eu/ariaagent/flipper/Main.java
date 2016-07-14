@@ -1,7 +1,8 @@
 package eu.ariaagent.flipper;
 /**
- * Main class for initializing the MMDS, with a path to where dialogue managers are located.
+ * Main class for initialising the MMDS, with a path to where dialogue managers are located.
  * @author WaterschootJB
+ * @author Siewart van Wingerden
  */
 public class Main {
     
@@ -10,14 +11,26 @@ public class Main {
      */
     public static void main( String args[] )
     {
-        String managerPath = System.getProperty("managerpath",null);
-        if(managerPath == null){
-            System.getProperty("user.dir");
+        
+        for (String arg : args) {
+            if(arg.equals("-help")){
+                System.out.println("-Dmanagerpath: Custom manager xml location e.g.: \"C:\\MyManagers\"'");
+            }
         }
-        else{
-            System.err.print("Make sure you initialize your application from an existing path!");
+        String managerPath = System.getProperty("managerpath", null);
+        if(managerPath == null){
+            managerPath = System.getProperty("user.dir");
+        }
+        else if(managerPath == null){
+            System.err.println(
+                "Make sure you initialize your application " +
+                "from an existing path! " +
+                "e.g. use 'java FlipperMMDS.jar -Dmanagerpath=\"C:\\MyManagers\"'"
+            );
             return;
         }
+        System.out.println("Manager Path:" + managerPath);
         ManagerController dialogueManagementSystem = new ManagerController(managerPath);
+        dialogueManagementSystem.run();
     }   
 }
