@@ -53,11 +53,9 @@ public class ManagerController {
                 }
             }
             long loopTime = System.currentTimeMillis() - startTime;
-            System.out.println(nextTime + ":" + loopTime +"="+(nextTime-loopTime));
             nextTime -= loopTime;
             if(nextTime <= 0 && nextManager != null){
                 nextManager.process();
-                System.out.println("Parsing Manager: "+ nextManager.getName() + " at " + System.currentTimeMillis());
                 if(-nextTime > nextManager.getInterval()/2){
                     System.out.println("We waited over half of the interval time ("+ (-nextTime) + " out of " + nextManager.getInterval()+")");
                 }else if(-nextTime > 50){
@@ -66,7 +64,6 @@ public class ManagerController {
             }else{
                 try {
                     if(nextTime > 0){
-                        System.out.println("Sleeping for..."+nextTime);
                         Thread.sleep(nextTime);
                     }
                 } catch (InterruptedException ex) {

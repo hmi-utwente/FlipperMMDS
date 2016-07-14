@@ -64,22 +64,22 @@ Managers: A template can contain one or multiple managers, and for each managers
 		<class classname="eu.ariaagent.managertest.managers.TestManager" path="../jars/TestFunctions.jar">
 			<parameter name="ip" value="0.0.0.0"/>
 			<parameterarray name="datasets">
-				<item value="info1.txt"/>
-				<item value="info2.txt"/>
-				<item value="info3.txt"/>
+				<item value="../info1.txt"/>
+				<item value="../info2.txt"/>
+				<item value="../data/info3.txt"/>
 			</parameterarray>
 		</class>
 		<informationstate>
 			<state name="$printtype" value="line" override="false"/>
 		</informationstate>
 		<behaviours>
-			<behaviour path="../jars/TestFunctions.jar" />
+			<behaviour path="../jars/TestFunctions.jar" classname="eu.ariaagent.managertest.behaviours.TestBehaviour" />
 		</behaviours>
 		<templates>
-			<template path="../templates/functionExample.xml" />		
+			<template path="../templates/functionExample.xml"  />		
 		</templates>
 		<functions>
-			<function path="../jars/TestFunctions.jar" classname="eu.ariaagent.managertest.functions.TestFunctions"/>		
+			<function path="../jars/TestFunctionsv2.jar" classname="eu.ariaagent.managertest.functions.TestFunctions"/>		
 		</functions>
 	</manager>
 </managers>

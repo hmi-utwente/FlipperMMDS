@@ -29,7 +29,6 @@ public class Main {
             );
             return;
         }
-        System.out.println("Manager Path:" + managerPath);
         ManagerController dialogueManagementSystem = new ManagerController(managerPath);
         dialogueManagementSystem.run();
     }   

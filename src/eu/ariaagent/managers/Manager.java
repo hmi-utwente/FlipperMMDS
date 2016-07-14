@@ -5,6 +5,7 @@
  */
 package eu.ariaagent.managers;
 
+import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 import java.util.Dictionary;
 import java.util.Map;
@@ -76,9 +77,11 @@ public interface Manager {
     
     /**
      * 
-     * @param jarPath Location of path
+     * 
+     * @param name
+     * @param instance
      */
-    void addBehaviourClasses(String jarPath);
+    void addGlobalBehaviour(String name, BehaviourClass instance);
    
 }
 

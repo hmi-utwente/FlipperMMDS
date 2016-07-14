@@ -6,6 +6,8 @@
 package eu.ariaagent.managers;
 
 import hmi.flipper.behaviourselection.TemplateController;
+import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
+import hmi.flipper.behaviourselection.template.behaviours.Behaviour;
 import hmi.flipper.behaviourselection.template.behaviours.BehaviourClassProvider;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 import java.net.MalformedURLException;
@@ -120,17 +122,12 @@ public abstract class DefaultManager implements Manager
     }
     
     @Override
-    public void addBehaviourClasses(String jarPath)
+    public void addGlobalBehaviour(String className, BehaviourClass instance)
     {
-        System.out.println("AddBehaviourClasses:"+jarPath);
-        URL[] urls = null;
-        try {
-            urls = new URL[]{new URL("jar:file:"+jarPath+"!/")};
-            BehaviourClassProvider.addExternalClasses(urls);
-        } catch (MalformedURLException ex) {
-            Logger.getLogger(DefaultManager.class.getName()).log(Level.SEVERE, null, ex);
+        try{
+            BehaviourClassProvider.addBehaviour(className, instance);
+        }catch(Exception ex){
+            System.out.println("Some text to print");
         }
-        
-        
     }
 }

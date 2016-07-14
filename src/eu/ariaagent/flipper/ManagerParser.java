@@ -1,12 +1,8 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package eu.ariaagent.flipper;
 
 import eu.ariaagent.managers.Manager;
 import eu.ariaagent.managers.SimpleManager;
+import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 import java.io.File;
 import java.io.FileInputStream;
@@ -256,9 +252,9 @@ public class ManagerParser {
                     }
                 }
             }
-            
         }
-        /*NodeList behavioursList = manager.getElementsByTagName("behaviours");
+        
+        NodeList behavioursList = manager.getElementsByTagName("behaviours");
         if(behavioursList.getLength() > 0) 
         {
             if(behavioursList.getLength() > 1)
@@ -272,16 +268,17 @@ public class ManagerParser {
                 if(current.getNodeName().equals("behaviour")){
                     NamedNodeMap attr = current.getAttributes();
                     String behavPath = attr.getNamedItem("path").getNodeValue();
+                    String className = attr.getNamedItem("classname").getNodeValue();
                     File a = new File(behavPath);
                     if(a.isAbsolute()){
-                        m.addBehaviourClasses(behavPath);
+                        m.addGlobalBehaviour(className, getBehaviourClassInstance(behavPath, className));
 
                     }else{
                         File parentFolder = new File(new File(filePath).getParent());
                         File b = new File(parentFolder, behavPath);
                         try{
                             String absolute = b.getCanonicalPath();
-                            m.addBehaviourClasses(absolute);
+                            m.addGlobalBehaviour(className, getBehaviourClassInstance(absolute, className));
                         }catch(IOException ex){
                             System.err.println("Could not resolve '"+behavPath+"' to an absolute path.");
                             return null;
@@ -290,7 +287,6 @@ public class ManagerParser {
                 }
             }
         }
-        */
         NodeList templatesList = manager.getElementsByTagName("templates");
         if(templatesList.getLength() > 0) 
         {
@@ -348,7 +344,6 @@ public class ManagerParser {
                         File b = new File(parentFolder, classPath);
                         try{
                             String absolute = b.getCanonicalPath();
-                            System.out.println(parentFolder+"("+filePath+")"+"+"+classPath+"="+ absolute);
                             func = getFunctionInstance(absolute, className);
                         }catch(IOException ex){
                             System.err.println("Could not resolve '"+classPath+"' to an absolute path.");
@@ -391,14 +386,24 @@ public class ManagerParser {
         return null;
     }
     
+    BehaviourClass getBehaviourClassInstance(String pathName, String className){
+        try {
+            Class c = getClass(pathName, className);
+            if(c == null){
+                return null;
+            }
+            return (BehaviourClass) c.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ManagerParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
+    }
+    
     Class getClass(String pathName, String className){ // todo: do some caching
         JarFile jarFile;
         try {
-            System.out.println(pathName);
             jarFile = new JarFile(pathName);
-
             Enumeration<JarEntry> e = jarFile.entries();
-
             URL[] urls = { new URL("jar:file:"+pathName+"!/") };
             URLClassLoader cl = URLClassLoader.newInstance(urls);
             return cl.loadClass(className);
