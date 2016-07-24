@@ -19,7 +19,7 @@ public class Main {
         }
         String managerPath = System.getProperty("managerpath", null);
         if(managerPath == null){
-            managerPath = System.getProperty("user.dir");
+            managerPath = System.getProperty("user.dir") + "\\config";
         }
         else if(managerPath == null){
             System.err.println(

@@ -14,6 +14,7 @@
 						  <xs:extension base="xs:string">
 						    <xs:attribute type="xs:string" name="name" use="required"/>
 						    <xs:attribute type="xs:string" name="value" use="required"/>
+                                                    <xs:attribute type="xs:boolean" name="path" use="optional"/>
 						  </xs:extension>
 					    </xs:simpleContent>
 					  </xs:complexType>
@@ -26,6 +27,7 @@
 							  <xs:simpleContent>
 							    <xs:extension base="xs:string">
 							  	  <xs:attribute type="xs:string" name="value" use="required"/>
+                                                                  <xs:attribute type="xs:boolean" name="path" use="optional"/>
 							    </xs:extension>
 							  </xs:simpleContent>
 						    </xs:complexType>
@@ -36,7 +38,6 @@
 				    </xs:element>
 				  </xs:sequence>
 				  <xs:attribute type="xs:string" name="classname" use="required"/>
-				  <xs:attribute type="xs:string" name="path" use="required"/>
 			    </xs:complexType>
 			  </xs:element>
 			  <xs:element name="informationstate" minOccurs="0" maxOccurs="1">
@@ -63,7 +64,6 @@
 					  <xs:complexType>
 					    <xs:simpleContent>
 						  <xs:extension base="xs:string">
-						    <xs:attribute type="xs:string" name="path" use="required"/>
 						    <xs:attribute type="xs:string" name="classname" use="required"/>
 						  </xs:extension>
 					    </xs:simpleContent>
@@ -95,7 +95,6 @@
 					    <xs:simpleContent>
 						  <xs:extension base="xs:string">
 						    <xs:attribute type="xs:string" name="classname" use="required"/>
-						    <xs:attribute type="xs:string" name="path" use="required"/>
 						  </xs:extension>
 					    </xs:simpleContent>
 					  </xs:complexType>

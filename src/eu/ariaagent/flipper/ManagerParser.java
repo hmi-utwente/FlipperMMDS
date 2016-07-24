@@ -2,7 +2,6 @@ package eu.ariaagent.flipper;
 
 import eu.ariaagent.managers.Manager;
 import eu.ariaagent.managers.SimpleManager;
-import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,14 +9,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.List;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -31,6 +25,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
+import eu.ariaagent.util.ManageableBehaviourClass;
+import eu.ariaagent.util.ManageableFunction;
 
 /**
  *
@@ -58,9 +54,15 @@ public class ManagerParser {
         return parseFolder("manager.xsd", pathName);
     }
     
+    public DefaultRecord getIS(){
+        return informationState;
+    }
+    
     public ArrayList<Manager> parseFolder(String xsdFileName, String pathName) {
+        
         ArrayList<Manager> managers = new ArrayList<>();
         File folder = new File(pathName);
+        
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 try {
@@ -135,7 +137,6 @@ public class ManagerParser {
 
         /* Find all <template>-Elements, and parse those */
         NodeList managerNodeList = doc.getElementsByTagName("manager");
-        boolean succes = true;
         for( int i=0; i<managerNodeList.getLength(); i++ ) {
             Element managerElement = (Element)managerNodeList.item(i);
             try {
@@ -144,14 +145,13 @@ public class ManagerParser {
                 if(manager != null){
                     managers.add(manager);
                 }
+                System.out.println("Loaded "+ manager.getName() + "("+manager.getID()+")");
             }catch( Exception e ) {
                 System.err.println("Manager Parse Error in '"+filePath+"': " + e.getMessage() );
                 errors.put("Error: " + e.getMessage(), -1 );
-                succes = false;
             }
         }
-        if( succes ) return managers;
-        else return null;   
+        return managers;  
     }
     
     Manager parseManagerElement(Element manager, String filePath){
@@ -166,31 +166,14 @@ public class ManagerParser {
             }
             Node firstManager = classList.item(0);
             NamedNodeMap attribs = firstManager.getAttributes();
-            
-            Node classPath = attribs.getNamedItem("path");
             Node className = attribs.getNamedItem("classname");
-            
-
-            if(classPath !=null && className != null){
-                String path = classPath.getNodeValue();
-                File a = new File(path);
-                if(a.isAbsolute()){
-                    m = getManagerInstance(path, className.getNodeValue(), is);
-                }else{
-                    File parentFolder = new File(new File(filePath).getParent());
-                    File b = new File(parentFolder, path);
-                    try{
-                        String absolute = b.getCanonicalPath();
-                        m = getManagerInstance(absolute, className.getNodeValue(), is);
-                    }catch(IOException ex){
-                        System.err.println("Could not resolve '"+path+"' to an absolute path.");
-                        return null;
-                    }
-                }
-            }else{
-                System.err.println("classname and/or path attributes not given in manager node " + name + " (" +id+") but class node is set. Manager not added!");
+            m = getManagerInstance(className.getNodeValue(), is);
+            if(m == null){
+                System.err.println("Manager "+ className +" in manager " + name + " (" +id+") could not be instantated. Make sure its folder is added in the classpath and its dependencies are in the same folder! (run.bat default: '/modules/' and '/modules/lib/)");
                 return null;
             }
+            m.setName(name);
+            m.setID(id);
             NodeList paramNodes = firstManager.getChildNodes();
             
             HashMap<String, String> parameters = new HashMap<>();
@@ -200,7 +183,23 @@ public class ManagerParser {
                 Node current = paramNodes.item(i);
                 if(current.getNodeName().equals("parameter")){
                     NamedNodeMap ats = current.getAttributes();
-                    parameters.put(ats.getNamedItem("name").getNodeValue(), ats.getNamedItem("value").getNodeValue()); //todo: nullcheck
+                    if(ats.getNamedItem("path").getNodeValue() != null && ats.getNamedItem("path").getNodeValue().equals("true")){
+                        String path = ats.getNamedItem("value").getNodeValue(); 
+                        File a = new File(path);
+                        if(!a.isAbsolute()){
+                            File parentFolder = new File(new File(filePath).getParent());
+                            File b = new File(parentFolder, path);
+                            try{
+                                path = b.getCanonicalPath();
+                            }catch(IOException ex){
+                                System.err.println("Could not resolve '"+path+"' to an absolute path.");
+                                return null;
+                            }
+                        }
+                        parameters.put(ats.getNamedItem("name").getNodeValue(), path); //todo: nullcheck
+                    }else{
+                        parameters.put(ats.getNamedItem("name").getNodeValue(), ats.getNamedItem("value").getNodeValue()); //todo: nullcheck
+                    }
                 }else if(current.getNodeName().equals("parameterarray")){
                     NodeList currentChilds = current.getChildNodes();
                     ArrayList<String> vals = new ArrayList<>();
@@ -209,7 +208,24 @@ public class ManagerParser {
                         
                         if(currentChild.getNodeName().equals("item")){
                              NamedNodeMap childAts = currentChild.getAttributes();
-                             vals.add(childAts.getNamedItem("value").getNodeValue());//todo: nullcheck
+                             if(childAts.getNamedItem("path").getNodeValue() != null && childAts.getNamedItem("path").getNodeValue().equals("true")){
+                                String path = childAts.getNamedItem("value").getNodeValue(); 
+                                File a = new File(path);
+                                if(!a.isAbsolute()){
+                                    File parentFolder = new File(new File(filePath).getParent());
+                                    File b = new File(parentFolder, path);
+                                    try{
+                                        path = b.getCanonicalPath();
+                                    }catch(IOException ex){
+                                        System.err.println("Could not resolve '"+path+"' to an absolute path.");
+                                        return null;
+                                    }
+                                }
+                                vals.add(path);
+                             }else{
+                                vals.add(childAts.getNamedItem("value").getNodeValue());//todo: nullcheck
+                             }
+                             
                         }
                     }
 
@@ -217,14 +233,17 @@ public class ManagerParser {
                     paramList.put(ats.getNamedItem("name").getNodeValue(), vals.toArray(new String[vals.size()]));//todo: nullcheck
                 }
             }
-             m.setParams(parameters, paramList);
+            System.out.println("Setting params: "+ m.getName());
+            m.setParams(parameters, paramList);
+            System.out.println("Set params: "+ m.getName());
         }
         else
         {
-            m = new SimpleManager(is);        
+            m = new SimpleManager(is); 
+            m.setName(name);
+            m.setID(id);
         }  
-        m.setName(name);
-        m.setID(id);
+        
         
 
         try{
@@ -267,22 +286,13 @@ public class ManagerParser {
                 Node current = children.item(i);
                 if(current.getNodeName().equals("behaviour")){
                     NamedNodeMap attr = current.getAttributes();
-                    String behavPath = attr.getNamedItem("path").getNodeValue();
                     String className = attr.getNamedItem("classname").getNodeValue();
-                    File a = new File(behavPath);
-                    if(a.isAbsolute()){
-                        m.addGlobalBehaviour(className, getBehaviourClassInstance(behavPath, className));
-
+                    ManageableBehaviourClass c = getBehaviourClassInstance(className);
+                    if(c == null){
+                        System.err.println("BehaviourClass "+ className +" in manager " + name + " (" +id+") could not be instantated. Make sure its folder is added in the classpath and its dependencies are in the same folder! (run.bat default: '/modules/' and '/modules/lib/)");
                     }else{
-                        File parentFolder = new File(new File(filePath).getParent());
-                        File b = new File(parentFolder, behavPath);
-                        try{
-                            String absolute = b.getCanonicalPath();
-                            m.addGlobalBehaviour(className, getBehaviourClassInstance(absolute, className));
-                        }catch(IOException ex){
-                            System.err.println("Could not resolve '"+behavPath+"' to an absolute path.");
-                            return null;
-                        }
+                        c.setManager(m);
+                        m.addGlobalBehaviour(className, c);
                     }
                 }
             }
@@ -333,27 +343,15 @@ public class ManagerParser {
                 Node current = children.item(i);
                 if(current.getNodeName().equals("function")){
                     NamedNodeMap attr = current.getAttributes();
-                    String classPath = attr.getNamedItem("path").getNodeValue();
                     String className = attr.getNamedItem("classname").getNodeValue();
-                    Object func = null;   
-                    File a = new File(classPath);
-                    if(a.isAbsolute()){
-                        func = getFunctionInstance(classPath, className);
-                    }else{
-                        File parentFolder = new File(new File(filePath).getParent());
-                        File b = new File(parentFolder, classPath);
-                        try{
-                            String absolute = b.getCanonicalPath();
-                            func = getFunctionInstance(absolute, className);
-                        }catch(IOException ex){
-                            System.err.println("Could not resolve '"+classPath+"' to an absolute path.");
-                            return null;
-                        }
-                    }
+                    ManageableFunction func = getFunctionInstance(className);   
+
                     if(func == null){
-                        System.out.println("Function "+ className  +" at "+ classPath +" in manager " + name + " (" +id+") could not be instantated. Make sure it exists!");
+                        System.err.println("Function "+ className +" in manager " + name + " (" +id+") could not be instantated. Make sure its folder is added in the classpath and its dependencies are in the same folder! (run.bat default: '/modules/' and '/modules/lib/)");
+                    } else {
+                        func.setManager(m);
+                        m.addFunction(func);
                     }
-                    m.addFunction(func);
                 }
             }
         }
@@ -361,9 +359,9 @@ public class ManagerParser {
         return m;
     }
     
-    Manager getManagerInstance(String pathName, String className, DefaultRecord is){
+    Manager getManagerInstance(String className, DefaultRecord is){
         try {
-            Class c = getClass(pathName, className);
+            Class<?> c = getClass(className);
             if(c == null){
                 return null;
             }
@@ -373,41 +371,78 @@ public class ManagerParser {
         }
         return null;
     }
-    Object getFunctionInstance(String pathName, String className){
+    
+    ManageableFunction getFunctionInstance(String className){
         try {
-            Class c = getClass(pathName, className);
+            Class<?> c = getClass(className);
             if(c == null){
                 return null;
             }
-            return c.newInstance();
+            return (ManageableFunction) c.newInstance();
+        } catch (InstantiationException | IllegalAccessException ex) {
+            Logger.getLogger(ManagerParser.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null; 
+   }
+    
+    ManageableBehaviourClass getBehaviourClassInstance(String className){
+        try {
+            Class<?> c = getClass(className);
+            if(c == null){
+                return null;
+            }
+            return (ManageableBehaviourClass) c.newInstance();
         } catch (InstantiationException | IllegalAccessException ex) {
             Logger.getLogger(ManagerParser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
     }
-    
-    BehaviourClass getBehaviourClassInstance(String pathName, String className){
+    //URLClassLoader classLoader;
+    ClassLoader classLoader;
+    Class getClass(String className){
         try {
-            Class c = getClass(pathName, className);
-            if(c == null){
-                return null;
+            /*String folderName = new File(new File(pathName).getParent()).getCanonicalPath();
+            if(!folderName.endsWith("/") && !folderName.endsWith("\\")){
+                folderName+=File.separator;
             }
-            return (BehaviourClass) c.newInstance();
-        } catch (InstantiationException | IllegalAccessException ex) {
-            Logger.getLogger(ManagerParser.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
-    }
-    
-    Class getClass(String pathName, String className){ // todo: do some caching
-        JarFile jarFile;
-        try {
-            jarFile = new JarFile(pathName);
-            Enumeration<JarEntry> e = jarFile.entries();
-            URL[] urls = { new URL("jar:file:"+pathName+"!/") };
-            URLClassLoader cl = URLClassLoader.newInstance(urls);
-            return cl.loadClass(className);
-        } catch (IOException | ClassNotFoundException ex) {
+            
+            //jarFile = new JarFile(pathName);
+            //Enumeration<JarEntry> e = jarFile.entries();
+            URL url =  new URL("jar:file:"+pathName+"!/");
+            ArrayList<URL> urlList = new ArrayList<>();
+            urlList.add(url);
+            File libs = new File(folderName+"lib");
+            
+            for (final File fileEntry : libs.listFiles()) {
+                if(fileEntry.isFile() && fileEntry.getName().endsWith(".jar")){
+                    
+                    urlList.add( new URL("jar:file:"+fileEntry.getPath()+"!/"));
+                }
+            }
+            
+
+            if(classLoader == null){
+                URL[] urls = new URL[urlList.size()];
+                urls = urlList.toArray(urls);
+                classLoader = URLClassLoader.newInstance(urls);
+            }
+            else{
+
+                for(URL urlLoop : classLoader.getURLs()){
+                    urlList.remove(urlLoop);
+                }
+                if(urlList.size() > 0){
+                    URL[] urls = new URL[urlList.size()];
+                    urls = urlList.toArray(urls);
+                    classLoader = URLClassLoader.newInstance(urls, classLoader);
+                }
+                
+            }*/
+            if(classLoader == null){
+                classLoader = ClassLoader.getSystemClassLoader();
+            }
+            return classLoader.loadClass(className);
+        } catch (/*IOException | */ClassNotFoundException ex) {
             Logger.getLogger(ManagerParser.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

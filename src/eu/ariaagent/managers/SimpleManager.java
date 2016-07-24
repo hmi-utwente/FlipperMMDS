@@ -5,9 +5,7 @@
  */
 package eu.ariaagent.managers;
 
-import javax.validation.constraints.NotNull;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
-import java.util.Collection;
 
 /**
  *

@@ -5,10 +5,10 @@
  */
 package eu.ariaagent.managers;
 
-import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
-import java.util.Dictionary;
 import java.util.Map;
+import eu.ariaagent.util.ManageableFunction;
+import eu.ariaagent.util.ManageableBehaviourClass;
 
 /**
  *
@@ -73,7 +73,7 @@ public interface Manager {
      * Add a custom Java function to the manager
      * @param functionInstance, functions to call from the manager
      */
-    void addFunction(Object functionInstance);
+    void addFunction(ManageableFunction functionInstance);
     
     /**
      * 
@@ -81,7 +81,7 @@ public interface Manager {
      * @param name
      * @param instance
      */
-    void addGlobalBehaviour(String name, BehaviourClass instance);
+    void addGlobalBehaviour(String name, ManageableBehaviourClass instance);
    
 }
 

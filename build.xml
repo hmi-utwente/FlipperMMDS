@@ -70,4 +70,10 @@
     nbproject/build-impl.xml file. 
 
     -->
+    <target name="-post-jar"> 
+        <copy todir="${dist.dir}">
+            <fileset dir="manager-resources/" includes="**"/>
+        </copy>
+       
+    </target> 
 </project>

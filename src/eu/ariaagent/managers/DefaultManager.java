@@ -6,17 +6,12 @@
 package eu.ariaagent.managers;
 
 import hmi.flipper.behaviourselection.TemplateController;
-import hmi.flipper.behaviourselection.behaviours.BehaviourClass;
-import hmi.flipper.behaviourselection.template.behaviours.Behaviour;
+
 import hmi.flipper.behaviourselection.template.behaviours.BehaviourClassProvider;
 import hmi.flipper.defaultInformationstate.DefaultRecord;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.validation.constraints.NotNull;
+import eu.ariaagent.util.ManageableBehaviourClass;
+import eu.ariaagent.util.ManageableFunction;
 
 /**
  *
@@ -32,16 +27,12 @@ public abstract class DefaultManager implements Manager
     protected String name;
     protected String id;
    
-    public DefaultManager(@NotNull DefaultRecord is, long interval){
+    public DefaultManager(DefaultRecord is){
         this.is = is;
         this.tc = new TemplateController();
-        this.interval = interval;
         this.previousTime = System.currentTimeMillis();
     }
     
-    public DefaultManager(DefaultRecord is){
-        this(is,500);
-    }
     
     /**
      * Determines if the manager's time is already up.
@@ -92,7 +83,7 @@ public abstract class DefaultManager implements Manager
     }
     
     @Override
-    public void addFunction(Object functionInstance) {
+    public void addFunction(ManageableFunction functionInstance) {
         tc.addFunction(functionInstance);
     }
 
@@ -122,12 +113,8 @@ public abstract class DefaultManager implements Manager
     }
     
     @Override
-    public void addGlobalBehaviour(String className, BehaviourClass instance)
+    public void addGlobalBehaviour(String className, ManageableBehaviourClass instance)
     {
-        try{
-            BehaviourClassProvider.addBehaviour(className, instance);
-        }catch(Exception ex){
-            System.out.println("Some text to print");
-        }
+        BehaviourClassProvider.addBehaviour(className, instance);
     }
 }
