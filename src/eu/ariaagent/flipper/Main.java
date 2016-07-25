@@ -18,7 +18,7 @@ public class Main {
             }
         }
         String managerPath = System.getProperty("managerpath", null);
-        if(managerPath == null){
+        if(managerPath == null && System.getProperty("user.dir") != null){
             managerPath = System.getProperty("user.dir") + "\\config";
         }
         else if(managerPath == null){
