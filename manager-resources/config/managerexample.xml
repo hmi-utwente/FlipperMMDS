@@ -24,17 +24,13 @@ Managers: A template can contain one or multiple managers, and for each managers
 			<parameter name="stopwords_path" path="true" value="../data/stopwords.txt"/>
 			<parameter name="synonyms_path" path="true" value="../data/synonyms.txt"/>
 			<parameter name="pos_model_path" path="true" value="../data/english-left3words-distsim.tagger"/>
-			
 		</class>
-		<!--<templates>
-			 todo rules to flipper templates 		
-		</templates>-->
 	</manager>
 
 	<manager id="002" name="BehaviourGenerator" interval="100">
 		<behaviours>
 			<behaviour classname="eu.aria.dialogue.behaviours.BehaviourToGui" />
-			</behaviours>
+                </behaviours>
 		<templates>
 			<template path="../templates/responses.xml" />		
 		</templates>
