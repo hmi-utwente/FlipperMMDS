@@ -30,7 +30,7 @@ Managers: A template can contain one or multiple managers, and for each managers
 	<manager id="002" name="BehaviourGenerator" interval="100">
 		<behaviours>
 			<behaviour classname="eu.aria.dialogue.behaviours.BehaviourToGui" />
-                </behaviours>
+        </behaviours>
 		<templates>
 			<template path="../templates/responses.xml" />		
 		</templates>
